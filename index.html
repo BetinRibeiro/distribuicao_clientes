@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Mensalidades</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge{{=not request.is_local and ',chrome=1' or ''}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://bootswatch.com/4/superhero/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container-fluid pt-1 px-4">
+        <div class="bg-dark rounded p-4">
+                    <div class="row">
+                        <div class="col-md-6 col-12">    
+                            <h5>Cadastro de Mensalidade</h5>
+                            <form id="mensalidadeForm">
+                                <div class="mb-3">
+                                    <label for="nomeCliente" class="form-label">Nome do Cliente</label>
+                                    <input type="text" class="form-control" id="nomeCliente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="valorMensalidade" class="form-label">Valor da Mensalidade</label>
+                                    <input type="number" class="form-control" id="valorMensalidade" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Adicionar</button>
+                            </form>
+                            <hr>
+                            <canvas id="graficoMensalidade" width="400" height="400"></canvas>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <h5>Clientes e Mensalidades</h5>
+
+        <div class="table-responsive text-center">
+            <table class="table text-start align-middle table-sm table-bordered table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Ação</th> <!-- Nova coluna para ação de deletar -->
+                                        <th>Nome</th>
+                                        <th>Valor da Mensalidade (R$)</th>
+                                        <th>Percentual (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaMensalidades">
+                                    <!-- As mensalidades serão inseridas aqui -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Total</th>
+                                        <td id="totalValor"></td>
+                                        <th>100 (%)</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+</div>
+<script src="script_clientes_controle.js"></script>
+</body>
+</html>
