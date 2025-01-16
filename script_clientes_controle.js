@@ -19,10 +19,21 @@ function atualizaTabelaEGrafico() {
     let mensalidades = JSON.parse(localStorage.getItem('mensalidades')) || [];
     let total = mensalidades.reduce((acc, mensalidade) => acc + mensalidade.valor, 0);
 
+    // Ordena as mensalidades por valor em ordem decrescente
     mensalidades.sort((a, b) => b.valor - a.valor);
+
+    // Recalcula os índices após a ordenação
+    mensalidades = mensalidades.map((mensalidade, index) => ({
+        ...mensalidade,
+        index
+    }));
+
+    // Salva a lista ordenada com índices corrigidos no localStorage
+    localStorage.setItem('mensalidades', JSON.stringify(mensalidades));
 
     let conteudoTabela = '';
 
+    // Renderiza a tabela com os índices atualizados
     mensalidades.forEach((mensalidade, index) => {
         let percentual = (mensalidade.valor / total * 100).toFixed(1);
         conteudoTabela += `<tr>
