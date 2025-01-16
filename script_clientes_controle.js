@@ -18,18 +18,18 @@ function adicionaMensalidadeLocalStorage(mensalidade) {
 function atualizaTabelaEGrafico() {
     let mensalidades = JSON.parse(localStorage.getItem('mensalidades')) || [];
     let total = mensalidades.reduce((acc, mensalidade) => acc + mensalidade.valor, 0);
-    
+
     mensalidades.sort((a, b) => b.valor - a.valor);
 
     let conteudoTabela = '';
-    mensalidades.forEach((mensalidade) => {
+    mensalidades.forEach((mensalidade, index) => {
         let percentual = (mensalidade.valor / total * 100).toFixed(1);
         conteudoTabela += `<tr>
-                               <td><button onclick="removeMensalidade('${mensalidade.nome}')" class="btn btn-danger btn-sm">
+                               <td><button onclick="removeMensalidade(${index})" class="btn btn-danger btn-sm">
                                    <i class="fa fa-trash" aria-hidden="true"></i>
                                </button></td>
-                               <td>${mensalidade.nome}</td>
-                               <td>${mensalidade.valor.toFixed(2)}</td>
+                               <td contenteditable="true" data-index="${index}" data-key="nome">${mensalidade.nome}</td>
+                               <td contenteditable="true" data-index="${index}" data-key="valor">${mensalidade.valor.toFixed(2)}</td>
                                <td>${percentual}%</td>
                            </tr>`;
     });
@@ -38,11 +38,36 @@ function atualizaTabelaEGrafico() {
     document.getElementById('totalValor').textContent = total.toFixed(2);
 
     atualizaGrafico(mensalidades, total);
+
+    // Adiciona evento para salvar ao pressionar Enter
+    const tableBody = document.getElementById('tabelaMensalidades');
+    tableBody.querySelectorAll('td[contenteditable="true"]').forEach(cell => {
+        cell.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                salvaAlteracoes(cell);
+            }
+        });
+    });
 }
 
-function removeMensalidade(nome) {
+function salvaAlteracoes(cell) {
+    const index = cell.dataset.index;
+    const key = cell.dataset.key;
+
+    if (index !== undefined && key) {
+        let mensalidades = JSON.parse(localStorage.getItem('mensalidades')) || [];
+        const newValue = key === 'valor' ? parseFloat(cell.textContent) : cell.textContent;
+
+        mensalidades[index][key] = newValue || mensalidades[index][key];
+        localStorage.setItem('mensalidades', JSON.stringify(mensalidades));
+        atualizaTabelaEGrafico();
+    }
+}
+
+function removeMensalidade(index) {
     let mensalidades = JSON.parse(localStorage.getItem('mensalidades')) || [];
-    mensalidades = mensalidades.filter(mensalidade => mensalidade.nome !== nome);
+    mensalidades.splice(index, 1);
     localStorage.setItem('mensalidades', JSON.stringify(mensalidades));
     atualizaTabelaEGrafico();
 }
